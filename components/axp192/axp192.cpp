@@ -184,8 +184,8 @@ void AXP192Component::brightness_callback(float value)
 //    const uint8_t c_min = 7;
 //    const uint8_t c_max = 12;
     float brightness = value / 100.0;
-    const uint8_t c_min = 7;
-    const uint8_t c_max = 0xCC;
+    const uint8_t c_min = 20;
+    const uint8_t c_max = 0x7C;
     auto ubri = c_min + static_cast<uint8_t>(brightness * (c_max - c_min));
     if (ubri > c_max) 
     {
