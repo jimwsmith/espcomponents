@@ -184,7 +184,7 @@ void AXP192Component::brightness_callback(float value)
 //    const uint8_t c_min = 7;
 //    const uint8_t c_max = 12;
     float brightness = value / 100.0;
-    const uint8_t c_min = 0;
+    const uint8_t c_min = 0x40;
     const uint8_t c_max = 0x7F;
     auto ubri = c_min + static_cast<uint8_t>(brightness * (c_max - c_min));
     if (ubri > c_max) 
@@ -199,7 +199,7 @@ void AXP192Component::brightness_callback(float value)
     buf &= 0x80;
     buf |= (ubri ); //retain reserved bit 7
     Write1Byte(0x27, buf); //DCDC3 is Display backlight
-    ESP_LOGD(TAG, "Brightness value V3: %f, brightness: %f, buf: 0x%x", value, brightness, buf);
+    ESP_LOGD(TAG, "Brightness value V4: %f, brightness: %f, buf: 0x%x", value, brightness, buf);
 }
 
 void AXP192Component::poweroff_callback()
