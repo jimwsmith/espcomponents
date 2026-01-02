@@ -9,7 +9,7 @@ static const char *TAG = "axp192";
 
 void AXP192Component::setup() 
 {
-//    begin(false, false, false, false, false);
+//    begin(false, false, false, false, false); //original code
     begin(false, true, false, false, false); //Disable LD03 (vibration motor)
     if (this->brightness_)
     {
@@ -58,7 +58,8 @@ void AXP192Component::update()
 
 void AXP192Component::begin(bool disableLDO2, bool disableLDO3, bool disableRTC, bool disableDCDC1, bool disableDCDC3)
 {  
-    // Set LDO2 & LDO3(TFT_LED & TFT) 3.0V
+    // Set LDO2 & LDO3(TFT_LED & TFT) 3.0V //original code
+    // Set LDO2 & LDO3(perif VBus and Vib motor VBus) 3.0V
     Write1Byte(0x28, 0xcc);	
 
     // Set ADC sample rate to 200hz
@@ -179,18 +180,25 @@ void AXP192Component::ReadBuff( uint8_t Addr , uint8_t Size , uint8_t *Buff )
 
 void AXP192Component::brightness_callback(float value)
 {
+//    float brightness = value / 100.0;
+//    const uint8_t c_min = 7;
+//    const uint8_t c_max = 12;
     float brightness = value / 100.0;
     const uint8_t c_min = 7;
-    const uint8_t c_max = 12;
+    const uint8_t c_max = 0xCC;
     auto ubri = c_min + static_cast<uint8_t>(brightness * (c_max - c_min));
     if (ubri > c_max) 
     {
         ubri = c_max;
     }
-    uint8_t buf = Read8bit( 0x28 );
-    buf &= 0x0F;
-    buf |= (ubri << 4);
-    Write1Byte(0x28, buf);
+//    uint8_t buf = Read8bit( 0x28 );
+//    buf &= 0x0F;
+//    buf |= (ubri << 4);
+//    Write1Byte(0x28, buf); original code
+    uint8_t buf = Read8bit( 0x27 );
+    buf &= 0x80;
+    buf |= (ubri ); //retain reserved bit 7
+    Write1Byte(0x27, buf); //DCDC3 is Display backlight
     ESP_LOGD(TAG, "Brightness value: %f, brightness: %f, buf: 0x%x", value, brightness, buf);
 }
 
