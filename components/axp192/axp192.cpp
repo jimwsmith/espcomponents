@@ -9,7 +9,8 @@ static const char *TAG = "axp192";
 
 void AXP192Component::setup() 
 {
-    begin(false, false, false, false, false);
+//    begin(false, false, false, false, false);
+    begin(false, true, false, false, false); //Disable LD03 (vibration motor)
     if (this->brightness_)
     {
         this->brightness_->add_on_state_callback(std::bind(&AXP192Component::brightness_callback, this, std::placeholders::_1));
