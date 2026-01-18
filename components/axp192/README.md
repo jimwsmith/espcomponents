@@ -1,3 +1,7 @@
+# AXP192 Power System Management
+
+## ESPHome config file
+
 ```yaml
 external_components:
   - source: github://eigger/espcomponents@latest
